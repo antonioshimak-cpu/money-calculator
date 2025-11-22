@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Redistribution Calculator</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .calculator-section {
+            margin-bottom: 40px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .input-field {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+        
+        .preset-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .preset-btn {
+            padding: 10px 15px;
+            background: var(--light);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .preset-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .results-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid var(--secondary);
+            transition: transform 0.3s;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .result-description {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .visualization {
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .visual-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .icons-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .icon {
+            width: 60px;
+            height: 60px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .billionaires-info {
+            margin-top: 40px;
+            background: var(--light);
+            padding: 25px;
+            border-radius: 8px;
+        }
+        
+        .billionaires-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .billionaire {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .billionaire:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .billionaire-name {
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .billionaire-details {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-field {
+                min-width: 100%;
+            }
+            
+            .results-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Money Redistribution Calculator</h1>
+            <p class="subtitle">Discover how many people could be fed and how many schools could be built instead of billionaire luxury spending</p>
+        </header>
+        
+        <div class="content">
+            <section class="calculator-section">
+                <div class="input-group">
+                    <div class="input-field">
+                        <label for="amount">Amount (in US dollars)</label>
+                        <input type="number" id="amount" placeholder="Enter amount" min="0" step="1000000" value="100000000">
+                    </div>
+                    
+                    <div class="input-field">
+                        <label for="category">Spending category (optional)</label>
+                        <select id="category">
+                            <option value="">Select category</option>
+                            <option value="yacht">Yacht</option>
+                            <option value="space" selected>Space flight</option>
+                            <option value="art">Art collection</option>
+                            <option value="jet">Private jet</option>
+                            <option value="mansion">Mansion</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="preset-buttons">
+                    <button type="button" class="preset-btn" data-amount="500000000">Yacht (500 million $)</button>
+                    <button type="button" class="preset-btn" data-amount="100000000">Space flight (100 million $)</button>
+                    <button type="button" class="preset-btn" data-amount="45000000">Private jet (45 million $)</button>
+                    <button type="button" class="preset-btn" data-amount="250000000">Mansion (250 million $)</button>
+                    <button type="button" class="preset-btn" data-amount="100000000000">Elon Musk's wealth (100 billion $)</button>
+                </div>
+            </section>
+            
+            <section class="results-section">
+                <div class="result-card">
+                    <h3 class="result-title">🍽️ People could be fed</h3>
+                    <div class="result-value" id="people-fed">0</div>
+                    <p class="result-description">Based on the cost of healthy nutrition $3.54 per person per day</p>
+                </div>
+                
+                <div class="result-card">
+                    <h3 class="result-title">🏫 Schools could be built</h3>
+                    <div class="result-value" id="schools-built">0</div>
+                    <p class="result-description">Average cost to build a school: $300,000</p>
+                </div>
+                
+                <div class="result-card">
+                    <h3 class="result-title">🏥 Hospitals could be built</h3>
+                    <div class="result-value" id="hospitals-built">0</div>
+                    <p class="result-description">Average cost to build a hospital: $2,000,000</p>
+                </div>
+                
+                <div class="result-card">
+                    <h3 class="result-title">💧 Wells could be built</h3>
+                    <div class="result-value" id="wells-built">0</div>
+                    <p class="result-description">Average cost to build a well: $5,000</p>
+                </div>
+            </section>
+            
+            <section class="visualization">
+                <h3 class="visual-title">Visualization: How many people could be fed</h3>
+                <div class="icons-container" id="food-icons">
+                    <!-- Icons will be added dynamically -->
+                </div>
+            </section>
+            
+            <section class="billionaires-info">
+                <h3 class="billionaires-title">Spending of the world's richest people</h3>
+                
+                <div class="billionaire">
+                    <div class="billionaire-name">Elon Musk - net worth: ~$220 billion</div>
+                    <div class="billionaire-details">Spending: SpaceX programs, collection of houses, private jets</div>
+                </div>
+                
+                <div class="billionaire">
+                    <div class="billionaire-name">Jeff Bezos - net worth: ~$150 billion</div>
+                    <div class="billionaire-details">Spending: yachts, space flights, mansions around the world</div>
+                </div>
+                
+                <div class="billionaire">
+                    <div class="billionaire-name">Bernard Arnault - net worth: ~$140 billion</div>
+                    <div class="billionaire-details">Spending: art collections, yachts, real estate</div>
+                </div>
+                
+                <div class="billionaire">
+                    <div class="billionaire-name">Bill Gates - net worth: ~$130 billion</div>
+                    <div class="billionaire-details">Spending: private jets, car collection, real estate</div>
+                </div>
+                
+                <div class="billionaire">
+                    <div class="billionaire-name">Mark Zuckerberg - net worth: ~$120 billion</div>
+                    <div class="billionaire-details">Spending: real estate, private security, islands</div>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>Money Redistribution Calculator &copy; 2025</p>
+        </footer>
+    </div>
+    <script>
+        // Constants for calculations
+        var FOOD_COST_PER_DAY = 3.54; // cost of food per person per day
+        var SCHOOL_COST = 300000; // cost to build one school
+        var HOSPITAL_COST = 2000000; // cost to build one hospital
+        var WELL_COST = 5000; // cost to build one well
+        
+        // Function to format large numbers
+        function formatNumber(num) {
+            if (num >= 1000000000) {
+                return (num / 1000000000).toFixed(1) + ' billion';
+            }
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + ' million';
+            }
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + ' thousand';
+            }
+            return num.toString();
+        }
+        
+        // Function to calculate and display results
+        function calculateAndDisplay() {
+            var amount = parseFloat(document.getElementById('amount').value) || 0;
+            
+            // Calculations
+            var peopleFed = Math.floor(amount / FOOD_COST_PER_DAY);
+            var schoolsBuilt = Math.floor(amount / SCHOOL_COST);
+            var hospitalsBuilt = Math.floor(amount / HOSPITAL_COST);
+            var wellsBuilt = Math.floor(amount / WELL_COST);
+            
+            // Update DOM
+            document.getElementById('people-fed').textContent = formatNumber(peopleFed);
+            document.getElementById('schools-built').textContent = formatNumber(schoolsBuilt);
+            document.getElementById('hospitals-built').textContent = formatNumber(hospitalsBuilt);
+            document.getElementById('wells-built').textContent = formatNumber(wellsBuilt);
+            
+            // Visualization (food icons)
+            updateFoodIcons(peopleFed);
+        }
+        
+        // Function to update food icons
+        function updateFoodIcons(peopleFed) {
+            var foodIconsContainer = document.getElementById('food-icons');
+            foodIconsContainer.innerHTML = '';
+            
+            // Determine how many icons to display (max 100)
+            var iconCount = Math.min(Math.floor(peopleFed / 1000000), 100);
+            
+            for (var i = 0; i < iconCount; i++) {
+                var icon = document.createElement('div');
+                icon.className = 'icon';
+                icon.innerHTML = '🍽️';
+                foodIconsContainer.appendChild(icon);
+            }
+            
+            // If we can feed many people but aren't showing all icons
+            if (peopleFed > 1000000 * 100) {
+                var moreText = document.createElement('div');
+                moreText.textContent = '... and ' + formatNumber(peopleFed - 1000000 * 100) + ' more people';
+                moreText.style.marginTop = '10px';
+                moreText.style.fontWeight = 'bold';
+                foodIconsContainer.appendChild(moreText);
+            }
+        }
+        
+        // Initialization function
+        function init() {
+            // Handler for input field
+            document.getElementById('amount').addEventListener('input', calculateAndDisplay);
+            
+            // Handlers for buttons
+            var presetButtons = document.querySelectorAll('.preset-btn');
+            for (var i = 0; i < presetButtons.length; i++) {
+                presetButtons[i].addEventListener('click', function() {
+                    var amount = this.getAttribute('data-amount');
+                    document.getElementById('amount').value = amount;
+                    calculateAndDisplay();
+                });
+            }
+            
+            // Initial calculation
+            calculateAndDisplay();
+        }
+        
+        // Initialize after DOM loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
